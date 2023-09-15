@@ -515,7 +515,7 @@ footer {
   justify-content: flex-end;
   align-items: center;
 }
-@media only screen and (min-width: 280px) and (max-width: 412px) {
+@media only screen and (min-width: 280px) and (max-width: 415px) {
   .bannerPage {
     width: 100%;
     object-fit: cover;
@@ -592,7 +592,7 @@ footer {
   }
 }
 
-@media only screen and (min-width: 411px) and (max-width: 540px) {
+@media only screen and (min-width: 416px) and (max-width: 540px) {
   .bannerPage {
     width: 100%;
   }

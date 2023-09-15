@@ -24,8 +24,6 @@ const MovieHomePage = () => {
     const navigate = useNavigate()
     const API_KEY = process.env.REACT_APP_API_KEYS
 
-    const footerIcons = [<AiFillFacebook style={{ margin: '5px' }} />, <AiOutlineInstagram style={{ margin: '5px' }} />, <AiOutlineTwitter style={{ margin: '5px' }} />, <AiFillYoutube style={{ margin: '5px' }} />]
-
     useEffect(() => {
         async function fetchAllMovie() {
             try {
@@ -97,11 +95,14 @@ const MovieHomePage = () => {
                     ))}
                 </div>
                 <footer>
-                    {footerIcons.map((icons, i) => (
-                        <div className='socialIcons' key={i}>
-                            {icons}
-                        </div>
-                    ))}
+
+                    <div className='socialIcons'>
+                        <AiFillFacebook style={{ margin: '5px' }} />
+                        <AiOutlineInstagram style={{ margin: '5px' }} />
+                        <AiOutlineTwitter style={{ margin: '5px' }} />
+                        <AiFillYoutube style={{ margin: '5px' }} />
+                    </div>
+
                     <div className='privacyPolicy'>
                         <ul>
                             <li>Conditions of Use</li>
