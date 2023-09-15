@@ -13,11 +13,13 @@ import { useNavigate } from "react-router-dom";
 import tomatoes from '../assets/tomatoes.png';
 import imdbLogo from '../assets/imdbLogo.png';
 import BannerPage from './BannerPage';
+import ErrorPage from '../components/ErrorPage';
 
 
 const MovieHomePage = () => {
     const [movieData, setMovieData] = useState([]);
     const [isFavourite, setIsFavourite] = useState([])
+    const [error, setError] = useState('')
 
     const navigate = useNavigate()
     const API_KEY = process.env.REACT_APP_API_KEYS
@@ -26,11 +28,16 @@ const MovieHomePage = () => {
 
     useEffect(() => {
         async function fetchAllMovie() {
-            const request = await axios.get(
-                `/movie/top_rated?api_key=${API_KEY}&language=en-us&with_genres=35&sort_by=release_date.asc`,
-            );
-            setMovieData(request.data.results.slice(0, 10));
-            return request;
+            try {
+                const request = await axios.get(
+                    `/movie/top_rated?api_key=${API_KEY}&language=en-us&with_genres=35&sort_by=release_date.asc`,
+                );
+                setMovieData(request.data.results.slice(0, 10));
+                return request;
+
+            } catch (error) {
+                setError(error)
+            }
         }
 
         fetchAllMovie();
@@ -45,6 +52,10 @@ const MovieHomePage = () => {
 
     }
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+
+    if (error) {
+        return <ErrorPage />
+    }
     return (
         <>
             <BannerPage />
@@ -86,11 +97,11 @@ const MovieHomePage = () => {
                     ))}
                 </div>
                 <footer>
-                    <div className='socialIcons'>
-                        {footerIcons.map(icons => (
-                            icons
-                        ))}
-                    </div>
+                    {footerIcons.map((icons, i) => (
+                        <div className='socialIcons' key={i}>
+                            {icons}
+                        </div>
+                    ))}
                     <div className='privacyPolicy'>
                         <ul>
                             <li>Conditions of Use</li>

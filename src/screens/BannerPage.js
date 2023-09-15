@@ -10,12 +10,18 @@ import imdbLogo from '../assets/imdbLogo.png';
 
 import { AiFillCaretRight } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
+import ErrorPage from '../components/ErrorPage';
+import Spinner from '../components/Spinner';
 
 const BannerPage = () => {
     const [searchMovie, setSearchMovie] = useState('')
     const [searchMovieResult, setSearchMovieResult] = useState([])
     const [bannerImage, setBannerImage] = useState({});
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const [error, setError] = useState('')
+
 
     const API_KEY = process.env.REACT_APP_API_KEYS
 
@@ -23,12 +29,13 @@ const BannerPage = () => {
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
     useEffect(() => {
-
         async function fetchSingleMovie() {
             const request = await axios.get(`/movie/top_rated?api_key=${API_KEY}&page=1&language=en-us&with_genres=35`)
             setBannerImage(request.data.results[Math.floor(Math.random() * request.data.results.length - 1)])
             return request
+
         }
+
 
         fetchSingleMovie()
     }, [API_KEY])
@@ -36,19 +43,28 @@ const BannerPage = () => {
 
 
     async function handleSearchMovie() {
-        const request = await axios.get(`/search/movie?query=${searchMovie}&api_key=${API_KEY}&sort_by=release_date.asc`)
-        setSearchMovieResult(request.data.results)
-        return request
+        try {
+            setIsLoading(true)
+            const request = await axios.get(`/search/movie?query=${searchMovie}&api_key=${API_KEY}&sort_by=release_date.asc`)
+            if (request) {
+                setIsLoading(false)
+            }
+            setSearchMovieResult(request.data.results)
+            // return request
+
+        } catch (error) {
+            setError(error)
+        }
     }
 
 
-    // curl --request GET \
-    // --url 'https://api.themoviedb.org/3/search/movie?query=Jack+Reacher&api_key=12a48185f23cfe8a470b5f90ce5ac93b'
-    // /3/search/movie
     const truncWord = (str, n) => {
         return str?.length > n ? str.slice(0, n - 1) + ' ' : str
     }
-
+    console.log('Errorrr::', error);
+    if (error !== '') {
+        return <ErrorPage />
+    }
     return (
         <header
             className="bannerPage"
@@ -86,10 +102,11 @@ const BannerPage = () => {
                         }}
                         onClick={() => handleSearchMovie()}
                     />
+                    { }
                     <ul style={{ background: '#000', position: 'absolute', marginTop: '7rem', width: '40%', textDecoration: 'none', overflow: 'hidden', overflowY: 'scroll', cursor: 'pointer' }}>
-                        {searchMovieResult && searchMovieResult.map(movie => (
-                            <li key={movie?.id} onClick={() => navigate(`/movie/${movie?.id}`)} style={{ display: 'flex', width: '80%', height: '10%', alignItems: 'center', }}>
-                                <img src={`${imageBaseUrl}${movie?.poster_path}`} alt={movie?.original_title} style={{ width: '40%', height: '4rem' }} />
+                        {isLoading ? <Spinner /> : searchMovieResult.map(movie => (
+                            <li key={movie?.id} onClick={() => navigate(`/movie/${movie?.id}`)} style={{ display: 'flex', width: '80%', height: '10%', alignItems: 'center', marginTop: '10px' }}>
+                                <img src={`${imageBaseUrl}${movie?.poster_path}`} alt={movie?.original_title} style={{ width: '40%', height: '5rem' }} />
                                 <div style={{ padding: '8px', fontSize: '18px' }}>
                                     <p>{movie?.title} </p>
                                     <p>{movie?.release_date} </p>

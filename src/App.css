@@ -251,6 +251,7 @@ footer {
 }
 
 .socialIcons {
+  display: flex;
   margin: 12px;
 }
 .privacyPolicy ul {
