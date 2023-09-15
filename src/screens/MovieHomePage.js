@@ -3,12 +3,17 @@ import axios from '../api/request';
 import { FiChevronRight } from "react-icons/fi";
 
 import { AiFillHeart } from "react-icons/ai";
+import { AiFillFacebook } from "react-icons/ai";
+import { AiOutlineInstagram } from "react-icons/ai";
+import { AiOutlineTwitter } from "react-icons/ai";
+import { AiFillYoutube } from "react-icons/ai";
 
 import { useNavigate } from "react-router-dom";
 
 import tomatoes from '../assets/tomatoes.png';
 import imdbLogo from '../assets/imdbLogo.png';
 import BannerPage from './BannerPage';
+
 
 const MovieHomePage = () => {
     const [movieData, setMovieData] = useState([]);
@@ -17,6 +22,7 @@ const MovieHomePage = () => {
     const navigate = useNavigate()
     const API_KEY = process.env.REACT_APP_API_KEYS
 
+    const footerIcons = [<AiFillFacebook style={{ margin: '5px' }} />, <AiOutlineInstagram style={{ margin: '5px' }} />, <AiOutlineTwitter style={{ margin: '5px' }} />, <AiFillYoutube style={{ margin: '5px' }} />]
 
     useEffect(() => {
         async function fetchAllMovie() {
@@ -79,6 +85,23 @@ const MovieHomePage = () => {
 
                     ))}
                 </div>
+                <footer>
+                    <div className='socialIcons'>
+                        {footerIcons.map(icons => (
+                            icons
+                        ))}
+                    </div>
+                    <div className='privacyPolicy'>
+                        <ul>
+                            <li>Conditions of Use</li>
+                            <li className='policy'>Privacy & Policy</li>
+                            <li>Press Room</li>
+                        </ul>
+                    </div>
+                    <p className='copyright'>
+                        © 2021 MovieBox by Adriana Eka Prayudha
+                    </p>
+                </footer>
             </div>
         </>
     );

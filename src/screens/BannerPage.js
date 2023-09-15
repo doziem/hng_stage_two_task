@@ -102,7 +102,6 @@ const BannerPage = () => {
                     <button className="bannerPage__signInBtn">Sign In</button>
                     <LiaGripLinesSolid
                         className='bannerPage__header__left__icons'
-
                     />
                 </div>
             </div>
