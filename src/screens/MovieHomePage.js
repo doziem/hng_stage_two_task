@@ -15,21 +15,20 @@ const MovieHomePage = () => {
     const [isFavourite, setIsFavourite] = useState([])
 
     const navigate = useNavigate()
+    const API_KEY = process.env.REACT_APP_API_KEYS
+
 
     useEffect(() => {
-        async function fetchRandomMovie() {
+        async function fetchAllMovie() {
             const request = await axios.get(
-                `/movie/top_rated?api_key=12a48185f23cfe8a470b5f90ce5ac93b&language=en-us&with_genres=35&sort_by=release_date.asc`,
-                {
-                    total_results: 10,
-                }
+                `/movie/top_rated?api_key=${API_KEY}&language=en-us&with_genres=35&sort_by=release_date.asc`,
             );
             setMovieData(request.data.results.slice(0, 10));
             return request;
         }
 
-        fetchRandomMovie();
-    }, []);
+        fetchAllMovie();
+    }, [API_KEY]);
 
     // console.log(movieData);
 

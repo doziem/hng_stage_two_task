@@ -26,14 +26,16 @@ const MovieDetailsPage = () => {
 
     // https://api.themoviedb.org/3/movie/{movie_id}
 
+    const API_KEY = process.env.REACT_APP_API_KEYS
+
     useEffect(() => {
         async function fetchTopRatedMovies() {
-            const request = await axios.get(`/movie/${id}?api_key=12a48185f23cfe8a470b5f90ce5ac93b&language=en-us`);
+            const request = await axios.get(`/movie/${id}?api_key=${API_KEY}&language=en-us`);
             setMovieDetailInfo(request.data);
 
         }
         fetchTopRatedMovies();
-    }, []);
+    }, [id, API_KEY]);
 
     console.log(movieDetailInfo);
 

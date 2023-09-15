@@ -17,23 +17,26 @@ const BannerPage = () => {
     const [bannerImage, setBannerImage] = useState({});
     const navigate = useNavigate()
 
+    const API_KEY = process.env.REACT_APP_API_KEYS
+
+
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
     useEffect(() => {
 
-        async function fetchRandomMovie() {
-            const request = await axios.get(`/movie/top_rated?api_key=12a48185f23cfe8a470b5f90ce5ac93b&page=1&language=en-us&with_genres=35`)
+        async function fetchSingleMovie() {
+            const request = await axios.get(`/movie/top_rated?api_key=${API_KEY}&page=1&language=en-us&with_genres=35`)
             setBannerImage(request.data.results[Math.floor(Math.random() * request.data.results.length - 1)])
             return request
         }
 
-        fetchRandomMovie()
-    }, [])
+        fetchSingleMovie()
+    }, [API_KEY])
 
 
 
     async function handleSearchMovie() {
-        const request = await axios.get(`/search/movie?query=${searchMovie}&api_key=12a48185f23cfe8a470b5f90ce5ac93b&sort_by=release_date.asc`)
+        const request = await axios.get(`/search/movie?query=${searchMovie}&api_key=${API_KEY}&sort_by=release_date.asc`)
         setSearchMovieResult(request.data.results)
         return request
     }

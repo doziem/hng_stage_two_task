@@ -1,5 +1,5 @@
 import './App.css';
-import { BannerPage, MovieDetailsPage, MovieHomePage } from './screens';
+import { MovieDetailsPage, MovieHomePage } from './screens';
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 

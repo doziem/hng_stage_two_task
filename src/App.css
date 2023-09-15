@@ -231,6 +231,7 @@ textarea::-webkit-input-placeholder {
 }
 .movieHomePage__container__info {
   width: 250px;
+  cursor: pointer;
 }
 
 [data-testid='movie-release-date'] {
