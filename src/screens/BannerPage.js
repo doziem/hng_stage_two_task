@@ -7,41 +7,43 @@ import logo from '../assets/tv.jpg';
 import tomatoes from '../assets/tomatoes.png';
 import imdbLogo from '../assets/imdbLogo.png';
 
+
 import { AiFillCaretRight } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
 
 const BannerPage = () => {
-    const [bannerImage, setBannerImage] = useState({
-        adult: false,
-        backdrop_path: '/zb6fM1CX41D9rF9hdgclu0peUmy.jpg',
-        genre_ids: (3)[(18, 36, 10752)],
-        id: 424,
-        original_language: 'en',
-        original_title: "Schindler's List",
-        overview:
-            'The true story of how businessman Oskar Schindler saved over a thousand Jewish lives from the Nazis while they worked as slaves in his factory during World War II.',
-        popularity: 71.218,
-        poster_path: '/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg',
-        release_date: '1993-12-15',
-        title: "Schindler's List",
-        video: false,
-        vote_average: 8.6,
-        vote_count: 14523,
-    });
+    const [searchMovie, setSearchMovie] = useState('')
+    const [searchMovieResult, setSearchMovieResult] = useState([])
+    const [bannerImage, setBannerImage] = useState({});
+    const navigate = useNavigate()
+
     const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     async function fetchRandomMovie() {
-    //         const request = await axios.get(`/movie/top_rated?api_key=12a48185f23cfe8a470b5f90ce5ac93b&page=1&language=en-us&with_genres=35`)
-    //         setBannerImage(request.data.results[Math.floor(Math.random() * request.data.results.length - 1)])
-    //         return request
-    //     }
+        async function fetchRandomMovie() {
+            const request = await axios.get(`/movie/top_rated?api_key=12a48185f23cfe8a470b5f90ce5ac93b&page=1&language=en-us&with_genres=35`)
+            setBannerImage(request.data.results[Math.floor(Math.random() * request.data.results.length - 1)])
+            return request
+        }
 
-    //     fetchRandomMovie()
-    // }, [])
+        fetchRandomMovie()
+    }, [])
 
+
+
+    async function handleSearchMovie() {
+        const request = await axios.get(`/search/movie?query=${searchMovie}&api_key=12a48185f23cfe8a470b5f90ce5ac93b&sort_by=release_date.asc`)
+        setSearchMovieResult(request.data.results)
+        return request
+    }
+
+
+    // curl --request GET \
+    // --url 'https://api.themoviedb.org/3/search/movie?query=Jack+Reacher&api_key=12a48185f23cfe8a470b5f90ce5ac93b'
+    // /3/search/movie
     const truncWord = (str, n) => {
-        return str?.length > n ? str.slice(0, n - 1) + '.' : str
+        return str?.length > n ? str.slice(0, n - 1) + ' ' : str
     }
 
     return (
@@ -68,6 +70,8 @@ const BannerPage = () => {
                     <input
                         placeholder="What do you want to watch?"
                         className="bannerPage__input"
+                        value={searchMovie}
+                        onChange={(e) => setSearchMovie(e.target.value)}
                     />
                     <BsSearch
                         style={{
@@ -77,7 +81,19 @@ const BannerPage = () => {
                             height: '16px',
                             width: '16px',
                         }}
+                        onClick={() => handleSearchMovie()}
                     />
+                    <ul style={{ background: '#000', position: 'absolute', marginTop: '7rem', width: '40%', textDecoration: 'none', overflow: 'hidden', overflowY: 'scroll', cursor: 'pointer' }}>
+                        {searchMovieResult && searchMovieResult.map(movie => (
+                            <li key={movie?.id} onClick={() => navigate(`/movie/${movie?.id}`)} style={{ display: 'flex', width: '80%', height: '10%', alignItems: 'center', }}>
+                                <img src={`${imageBaseUrl}${movie?.poster_path}`} alt={movie?.original_title} style={{ width: '40%', height: '4rem' }} />
+                                <div style={{ padding: '8px', fontSize: '18px' }}>
+                                    <p>{movie?.title} </p>
+                                    <p>{movie?.release_date} </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
                 <div className="bannerPage__header__left">
                     <button className="bannerPage__signInBtn">Sign In</button>

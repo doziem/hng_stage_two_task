@@ -10,53 +10,15 @@ import { IoTicketOutline } from 'react-icons/io5'
 import { AiOutlineUnorderedList } from 'react-icons/ai'
 import { AiFillStar } from 'react-icons/ai'
 
+
+
 import bottomImg from '../assets/bottomImg.png'
 
 import { useParams } from 'react-router-dom';
 
 const MovieDetailsPage = () => {
-    const [movieDetailInfo, setMovieDetailInfo] = useState({
-        // adult: false,
-        // backdrop_path: '/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg',
-        // belongs_to_collection: null,
-        // budget: 25000000,
-        // genres: [
-        //     { id: 18, name: 'Drama' },
-        //     { id: 80, name: 'Crime' },
-        // ],
-        // homepage: '',
-        // id: 278,
-        // imdb_id: 'tt0111161',
-        // original_language: 'en',
-        // original_title: 'The Shawshank Redemption',
-        // overview:
-        //     'Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.',
-        // popularity: 90.066,
-        // poster_path: '/lyQBXzOQSuE59IsHyhrp0qIiPAz.jpg',
-        // production_companies: [
-        //     {
-        //         id: 97,
-        //         logo_path: '/qv3ih9pR9w2XNKZDsqDqAGuZjqc.png',
-        //         name: 'Castle Rock Entertainment',
-        //         origin_country: 'US',
-        //     },
-        // ],
-        // production_countries: [
-        //     { iso_3166_1: 'US', name: 'United States of America' },
-        // ],
-        // release_date: '1994-09-23',
-        // revenue: 28341469,
-        // runtime: 142,
-        // spoken_languages: [
-        //     { english_name: 'English', iso_639_1: 'en', name: 'English' },
-        // ],
-        // status: 'Released',
-        // tagline: 'Fear can hold you prisoner. Hope can set you free.',
-        // title: 'The Shawshank Redemption',
-        // video: false,
-        // vote_average: 8.701,
-        // vote_count: 24577,
-    });
+
+    const [movieDetailInfo, setMovieDetailInfo] = useState({});
 
     const { id } = useParams();
 
@@ -65,12 +27,12 @@ const MovieDetailsPage = () => {
     // https://api.themoviedb.org/3/movie/{movie_id}
 
     useEffect(() => {
-        async function fetchRandomMovie() {
-            const request = await axios.get(`/movie/${id}?api_key=12a48185f23cfe8a470b5f90ce5ac93b&language=en-us&with_genres=28`);
+        async function fetchTopRatedMovies() {
+            const request = await axios.get(`/movie/${id}?api_key=12a48185f23cfe8a470b5f90ce5ac93b&language=en-us`);
             setMovieDetailInfo(request.data);
-            return request;
+
         }
-        fetchRandomMovie();
+        fetchTopRatedMovies();
     }, []);
 
     console.log(movieDetailInfo);
@@ -84,12 +46,13 @@ const MovieDetailsPage = () => {
     // git remote add origin git@github.com:doziem/hng_stage_two_task.git
     // git push -u origin main
 
-    function padToTwoDigits(totalMinutes) {
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
+    // function padToTwoDigits(totalMinutes) {
+    //     const hours = Math.floor(totalMinutes / 60);
+    //     const minutes = totalMinutes % 60;
 
-        return `${hours}h: ${minutes > 0 ? ` ${minutes}m` : ''}`;
-    }
+    //     return `${hours}h: ${minutes > 0 ? ` ${minutes}m` : ''}`;
+    // }
+
 
 
     return (
@@ -139,10 +102,12 @@ const MovieDetailsPage = () => {
             </div>
 
             <div className="movieDetailsPage__main">
-                <img
+                {<img
                     src={`${imageBaseUrl}${movieDetailInfo?.poster_path}`}
                     alt={movieDetailInfo?.title}
                 />
+                }
+
 
                 <div className='movieDetailsPage__main_details'>
                     <div className='movieDetailsPage__main_details__left'>
@@ -151,7 +116,7 @@ const MovieDetailsPage = () => {
 
                             <p data-testid='movie-release-date'> {new Date(movieDetailInfo?.release_date).getFullYear()} </p>
                             <p> • PG-13 • </p>
-                            <p data-testid='movie-runtime'>{padToTwoDigits(movieDetailInfo?.runtime)} </p>
+                            <p data-testid='movie-runtime'>{movieDetailInfo?.runtime} </p>
                             {movieDetailInfo?.genres?.map(item => (
                                 <button className='movieGenre'>{item?.name}  </button>
                             ))}
@@ -161,8 +126,7 @@ const MovieDetailsPage = () => {
                         <div className='movieDetailsPage__main_details__cast'>
                             <p>Director : <p className='movieDetailsPage__cast_name'>Joseph Kosinski </p> </p>
                             <p className='middle'>Writers :  <p className='movieDetailsPage__cast_name'>Jim Cash, Jack Epps Jr,  Peter Craig</p>  </p>
-                            <p>Stars
-                                :  <p className='movieDetailsPage__cast_name'>Tom Cruise, Jennifer Connelly, Miles Teller </p></p>
+                            <p>Stars : <p className='movieDetailsPage__cast_name'>Tom Cruise, Jennifer Connelly, Miles Teller </p></p>
                             <div className='movieDetailsPage__cast_topRated'>
                                 <button className='topRated'>Top rated movie #65</button>
                                 <div className='movieDetailsPage__form'>
